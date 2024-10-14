@@ -30,7 +30,9 @@ class Signup(Resource):
         try:
             db.session.add(new_user)
             db.session.commit()
-            return make_response(jsonify({"message": "User registered successfully"}), 201)
+
+            # Return the newly created user details in the response
+            return make_response(jsonify({"user": {"name": new_user.name, "email": new_user.email}}), 201)
         except Exception as e:
             db.session.rollback()
             return make_response(jsonify({"message": "Failed to register user"}), 500)
@@ -42,7 +44,6 @@ class Checksession(Resource):
             return user.to_dict(), 200
         return make_response({"error": "no active session"}, 401)
         
-        
 class Login(Resource):
     def post(self):
         name = request.get_json().get('name')
@@ -53,10 +54,9 @@ class Login(Resource):
             session['user_id'] = user.id
             return user.to_dict(), 200
         else:
-            return make_response({"error" : "401 unauthorised"}, 401)
+            return make_response({"error": "401 unauthorized"}, 401)
         
 class Logout(Resource):
     def post(self):
         session.pop('user_id', None)
         return make_response({"message": "Successfully logged out."}, 200)
-        
