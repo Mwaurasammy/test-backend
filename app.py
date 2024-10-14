@@ -30,4 +30,5 @@ api.add_resource(Checksession, '/check_session')
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        # app.run(debug=True)
+        # enable this to test locally but disable when you push to avoid hosting issues
+        # app.run(debug=True) 
