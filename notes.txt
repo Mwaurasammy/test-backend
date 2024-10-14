@@ -1,0 +1,6 @@
+things we need:
+    --signup
+    --signin
+    -- check sessions
+    --logout
+    --admin dashboard
