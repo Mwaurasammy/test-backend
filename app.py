@@ -16,7 +16,7 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 db.init_app(app)
 migrate = Migrate(app, db)
-CORS(app)
+CORS(app, supports_credentials=True)
 
 api = Api(app)
 
