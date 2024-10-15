@@ -9,7 +9,9 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), unique=True, nullable=False)
     email = db.Column(db.String(40), unique=True, nullable=False)
-    _password_hash = db.Column(db.String, unique=True, nullable=False)
+    _password_hash = db.Column(db.String, nullable=False)
+
+    subscriptions = db.relationship('Subscription', backref='user', lazy=True)
 
     @property
     def password(self):
@@ -26,5 +28,34 @@ class User(db.Model):
         return {
             "id": self.id,
             "name": self.name,
-            "email": self.email
+            "email": self.email,
+            "subscriptions": [subscription.to_dict() for subscription in self.subscriptions]
         }
+
+class Subscription(db.Model):
+    __tablename__ = 'subscriptions'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    category = db.Column(db.String(30), nullable=False)
+    cost = db.Column(db.Float, nullable=False)
+    billing_cycle = db.Column(db.String(20), nullable=False)
+    date_of_payment = db.Column(db.Date, nullable=False)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'category': self.category,
+            'cost': self.cost,
+            'billing_cycle': self.billing_cycle,
+            'date_of_payment': self.date_of_payment.isoformat(),
+        }
+
+# Helper function for email validation
+import re
+
+def is_valid_email(email):
+    regex = r'^\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    return re.match(regex, email)
