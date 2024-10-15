@@ -11,7 +11,7 @@ class User(db.Model):
     email = db.Column(db.String(40), unique=True, nullable=False)
     _password_hash = db.Column(db.String, nullable=False)
 
-    subscriptions = db.relationship('Subscription', backref='user', lazy=True)
+    subscriptions = db.relationship('Subscription', back_populates='user', lazy=True)
 
     @property
     def password(self):
@@ -34,15 +34,45 @@ class User(db.Model):
 
 class Subscription(db.Model):
     __tablename__ = 'subscriptions'
+    serialize_rules=("-user.subscriptions")
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
-    category = db.Column(db.String(30), nullable=False)
+    _category = db.Column("category",db.String(30), nullable=False)
     cost = db.Column(db.Float, nullable=False)
-    billing_cycle = db.Column(db.String(20), nullable=False)
+    _billing_cycle = db.Column("billing_cycle",db.String(20), nullable=False)
     date_of_payment = db.Column(db.Date, nullable=False)
+    
+
+
+    
+    @property
+    def category(self):
+        return self._category
+    
+    @category.setter
+    def category(self,value):
+        category_list=["streaming","music","software","shopping","gaming","education","cloud storage"]
+
+        if value not in category_list:
+            raise ValueError(f"Category must be one of {category_list}")
+        self._category=value
+
+
+
+    @property
+    def billing_cycle(self):
+        return self._billing_cycle
+    
+    @billing_cycle.setter
+    def billing_cycle(self,value):
+        billing_cycle_list=["Weekly","Monthly","Yearly"]
+
+        if value not in billing_cycle_list:
+            raise ValueError(f"Category must be one of {billing_cycle_list}")
+        self._billing_cycle=value
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-
+    user=db.relationship("User",back_populates="subscriptions")
     def to_dict(self):
         return {
             'id': self.id,
@@ -51,6 +81,7 @@ class Subscription(db.Model):
             'cost': self.cost,
             'billing_cycle': self.billing_cycle,
             'date_of_payment': self.date_of_payment.isoformat(),
+            
         }
 
 # Helper function for email validation
@@ -59,3 +90,7 @@ import re
 def is_valid_email(email):
     regex = r'^\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
     return re.match(regex, email)
+
+def __repr__(self):
+        return f"Subscription {self.id}, name:{self.name}, category:{self.category}, cost:{self.cost}, billing_cycle:{self.billing_cycle},date_of_payment:{self.date_of_payment} for user {self.user_id} "   
+  
