@@ -60,7 +60,9 @@ class SubscriptionList(Resource):
         
         return new_subscription.to_dict(), 201
 
-      def delete(self, user_id, subscription_id):
+class SubscriptionIndex(Resource):
+    
+    def delete(self, user_id, subscription_id):
         user = User.query.get(user_id)
         if not user:
             return {"error": "User not found"}, 404

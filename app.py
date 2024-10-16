@@ -5,7 +5,7 @@ from flask_migrate import Migrate
 from models import db, User
 from flask_cors import CORS
 from auth import Signup, Login, Logout, Checksession
-from user_profile import SubscriptionList, UserProfile
+from user_profile import SubscriptionList, UserProfile, SubscriptionIndex
 from dotenv import load_dotenv
 import os
 
@@ -27,7 +27,7 @@ api.add_resource(Logout, '/logout')
 api.add_resource(Checksession, '/check_session')
 api.add_resource(UserProfile, '/user/<int:user_id>')
 api.add_resource(SubscriptionList, '/user/<int:user_id>/subscriptions')
-
+api.add_resource(SubscriptionIndex, '/user/<int:user_id>/subscriptions/<int:subscription_id>')
 
 
 if __name__ == '__main__':
