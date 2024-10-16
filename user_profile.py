@@ -71,6 +71,6 @@ class SubscriptionIndex(Resource):
         if not subscription:
             return {"error": "Subscription not found"}, 404
         db.session.delete(subscription)
-        db.sesison.commit()
+        db.session.commit()
 
         return {"message": "Subscription deleted successfully"}, 200
