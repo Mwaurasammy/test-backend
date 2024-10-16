@@ -74,3 +74,29 @@ class SubscriptionIndex(Resource):
         db.session.commit()
 
         return {"message": "Subscription deleted successfully"}, 200
+
+
+    def patch(self,user_id,subscription_id):
+        user=User.query.get(user_id)
+
+        if not user:
+            return {"error":"User not found"},404
+        
+        subscription=Subscription.query.filter_by(id=subscription_id,user_id=user_id).first()
+
+        if not subscription:
+            return {"error":"Subscription not found"},404
+        
+        data=request.get_json()
+
+        subscription.name=data.get( 'name',subscription.name)
+        subscription.category=data.get( 'category',subscription.category)
+        subscription.cost=data.get( 'cost',subscription.cost)
+        subscription.billing_cycle=data.get( 'billing_cycle',subscription.billing_cycle)
+        subscription.date_of_payment=data.get( 'date_of_payment',subscription.date_of_payment)
+
+
+        db.session.commit()
+
+        return subscription.to_dict(), 200
+    
