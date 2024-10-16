@@ -59,3 +59,16 @@ class SubscriptionList(Resource):
         db.session.commit()
         
         return new_subscription.to_dict(), 201
+
+      def delete(self, user_id, subscription_id):
+        user = User.query.get(user_id)
+        if not user:
+            return {"error": "User not found"}, 404
+
+        subscription = Subscription.query.filter_by(id=subscription_id, user_id=user_id).first()
+        if not subscription:
+            return {"error": "Subscription not found"}, 404
+        db.session.delete(subscription)
+        db.sesison.commit()
+
+        return {"message": "Subscription deleted successfully"}, 200
