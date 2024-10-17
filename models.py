@@ -42,31 +42,6 @@ class Subscription(db.Model):
     date_of_payment = db.Column(db.Date, nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    @property
-    def category(self):
-        return self._category
-    
-    @category.setter
-    def category(self,value):
-        category_list=["streaming","music","software","shopping","gaming","education","cloud storage"]
-
-        if value not in category_list:
-            raise ValueError(f"Category must be one of {category_list}")
-        self._category=value
-
-
-
-    @property
-    def billing_cycle(self):
-        return self._billing_cycle
-    
-    @billing_cycle.setter
-    def billing_cycle(self,value):
-        billing_cycle_list=["Weekly","Monthly","Yearly"]
-
-        if value not in billing_cycle_list:
-            raise ValueError(f"Category must be one of {billing_cycle_list}")
-        self._billing_cycle=value
 
     def to_dict(self):
         return {
