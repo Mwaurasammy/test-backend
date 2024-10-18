@@ -1,0 +1,465 @@
+{
+  "definitions": {},
+  "info": {
+    "description": "powered by Flasgger",
+    "termsOfService": "/tos",
+    "title": "A swagger API",
+    "version": "0.0.1"
+  },
+  "paths": {
+    "/check_session": {
+      "get": {
+        "description": "Check if there is an active session.",
+        "responses": {
+          "200": {
+            "description": "User session is active."
+          },
+          "401": {
+            "description": "No active session."
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/login": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Log in a user.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "password"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User logged in successfully."
+          },
+          "400": {
+            "description": "Missing name or password."
+          },
+          "401": {
+            "description": "Unauthorized."
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/logout": {
+      "post": {
+        "description": "Log out the current user.",
+        "responses": {
+          "200": {
+            "description": "Logged out successfully."
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/sign_up": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Register a new user.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "email",
+                "password"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "User created successfully."
+          },
+          "400": {
+            "description": "All fields are required."
+          },
+          "409": {
+            "description": "User already exists."
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/user/{user_id}": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Manage user profiles.",
+        "parameters": [
+          {
+            "description": "The ID of the user",
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "email": {
+                  "description": "The email of the user",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "The name of the user",
+                  "type": "string"
+                },
+                "password": {
+                  "description": "The new password for the user",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "email"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User data retrieved/updated successfully.",
+            "schema": {
+              "properties": {
+                "user": {
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "404": {
+            "description": "User not found."
+          }
+        },
+        "tags": [
+          "User Profile"
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Manage user profiles.",
+        "parameters": [
+          {
+            "description": "The ID of the user",
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "email": {
+                  "description": "The email of the user",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "The name of the user",
+                  "type": "string"
+                },
+                "password": {
+                  "description": "The new password for the user",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "email"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User data retrieved/updated successfully.",
+            "schema": {
+              "properties": {
+                "user": {
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "404": {
+            "description": "User not found."
+          }
+        },
+        "tags": [
+          "User Profile"
+        ]
+      }
+    },
+    "/user/{user_id}/subscriptions": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Create or list user subscriptions.",
+        "parameters": [
+          {
+            "description": "The ID of the user",
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "billing_cycle": {
+                  "description": "Billing cycle of the subscription (e.g., Monthly)",
+                  "type": "string"
+                },
+                "category": {
+                  "description": "Category of the subscription",
+                  "type": "string"
+                },
+                "cost": {
+                  "description": "Cost of the subscription",
+                  "format": "float",
+                  "type": "number"
+                },
+                "date_of_payment": {
+                  "description": "Date of payment for the subscription",
+                  "format": "date",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "Name of the subscription",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "category",
+                "cost",
+                "billing_cycle",
+                "date_of_payment"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of subscriptions retrieved successfully."
+          },
+          "201": {
+            "description": "Subscription created successfully."
+          },
+          "404": {
+            "description": "User not found."
+          },
+          "415": {
+            "description": "Unsupported media type. Ensure Content-Type is application/json."
+          }
+        },
+        "tags": [
+          "Subscriptions"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Create or list user subscriptions.",
+        "parameters": [
+          {
+            "description": "The ID of the user",
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "billing_cycle": {
+                  "description": "Billing cycle of the subscription (e.g., Monthly)",
+                  "type": "string"
+                },
+                "category": {
+                  "description": "Category of the subscription",
+                  "type": "string"
+                },
+                "cost": {
+                  "description": "Cost of the subscription",
+                  "format": "float",
+                  "type": "number"
+                },
+                "date_of_payment": {
+                  "description": "Date of payment for the subscription",
+                  "format": "date",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "Name of the subscription",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "category",
+                "cost",
+                "billing_cycle",
+                "date_of_payment"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of subscriptions retrieved successfully."
+          },
+          "201": {
+            "description": "Subscription created successfully."
+          },
+          "404": {
+            "description": "User not found."
+          },
+          "415": {
+            "description": "Unsupported media type. Ensure Content-Type is application/json."
+          }
+        },
+        "tags": [
+          "Subscriptions"
+        ]
+      }
+    },
+    "/user/{user_id}/subscriptions/{subscription_id}": {
+      "delete": {
+        "description": "Delete a specific subscription.",
+        "parameters": [
+          {
+            "description": "The ID of the user",
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "The ID of the subscription",
+            "in": "path",
+            "name": "subscription_id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription deleted successfully."
+          },
+          "404": {
+            "description": "Subscription not found."
+          }
+        },
+        "tags": [
+          "Subscriptions"
+        ]
+      }
+    }
+  },
+  "swagger": "2.0"
+}
