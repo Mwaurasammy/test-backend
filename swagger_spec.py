@@ -1,5 +1,3 @@
-# swagger_spec.py
-
 sign_up_spec = {
     'tags': ['Auth'],
     'description': 'Register a new user.',
@@ -72,6 +70,7 @@ checksession_spec = {
     }
 }
 
+# Fix: Removed 'body' from GET requests for user profile and subscriptions
 user_profile_spec = {
     'tags': ['User Profile'],
     'description': 'Manage user profiles.',
@@ -82,29 +81,6 @@ user_profile_spec = {
             'required': True,
             'type': 'integer',
             'description': 'The ID of the user'
-        },
-        {
-            'name': 'body',
-            'in': 'body',
-            'required': True,
-            'schema': {
-                'type': 'object',
-                'properties': {
-                    'name': {
-                        'type': 'string',
-                        'description': 'The name of the user',
-                    },
-                    'email': {
-                        'type': 'string',
-                        'description': 'The email of the user',
-                    },
-                    'password': {
-                        'type': 'string',
-                        'description': 'The new password for the user',
-                    }
-                },
-                'required': ['name', 'email']  # Specify required fields
-            }
         }
     ],
     'responses': {
@@ -128,12 +104,34 @@ user_profile_spec = {
         }
     },
     'produces': ['application/json'],  # Response format
-    'consumes': ['application/json'],   # Request format
+    'consumes': ['application/json'],   # Request format for PUT requests
 }
 
 subscription_list_spec = {
     'tags': ['Subscriptions'],
     'description': 'Create or list user subscriptions.',
+    'parameters': [
+        {
+            'name': 'user_id',
+            'in': 'path',
+            'required': True,
+            'type': 'integer',
+            'description': 'The ID of the user'
+        }
+    ],
+    'responses': {
+        '200': {'description': 'List of subscriptions retrieved successfully.'},
+        '201': {'description': 'Subscription created successfully.'},
+        '404': {'description': 'User not found.'},
+        '415': {'description': 'Unsupported media type. Ensure Content-Type is application/json.'}
+    },
+    'produces': ['application/json']
+}
+
+# POST requires body
+subscription_create_spec = {
+    'tags': ['Subscriptions'],
+    'description': 'Create a new subscription for a user.',
     'parameters': [
         {
             'name': 'user_id',
@@ -160,16 +158,12 @@ subscription_list_spec = {
         }
     ],
     'responses': {
-        '200': {'description': 'List of subscriptions retrieved successfully.'},
         '201': {'description': 'Subscription created successfully.'},
-        '404': {'description': 'User not found.'},
-        '415': {'description': 'Unsupported media type. Ensure Content-Type is application/json.'}
+        '404': {'description': 'User not found.'}
     },
-    'consumes': ['application/json'],
+    'consumes': ['application/json'],  # Request format for POST
     'produces': ['application/json']
 }
-
-
 
 subscription_index_spec = {
     'tags': ['Subscriptions'],

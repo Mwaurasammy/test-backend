@@ -55,9 +55,15 @@ class Logout(Resource):
 class Checksession(Resource):
     @swag_from(checksession_spec)
     def get(self):
-        user_id = session.get('user_id')
-        if user_id:
-            user = User.query.filter_by(id=user_id).first()
-            if user:
-                return jsonify(user.to_dict()), 200
-        return {"error": "No active session"}, 401
+        try:
+            user_id = session.get('user_id')
+            if user_id:
+                user = User.query.filter_by(id=user_id).first()
+                if user:
+                    # Use jsonify to ensure the response is properly formatted as JSON
+                    return user.to_dict(), 200
+            return {"error": "No active session"}, 401
+        except Exception as e:
+            print(f"Error in Checksession: {e}")
+            return {"error": "Internal Server Error"}, 500
+

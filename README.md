@@ -74,6 +74,7 @@ Subscriptly is a subscription management API built with Flask, SQLAlchemy, and F
     API documentation is available at:
     http://localhost:5000/apidocs/ -- local test
     https://test-backend-e4ae.onrender.com/apidocs/
+    You can use a dummy user ID 86 for some tests
 
 
 # Endpoints
